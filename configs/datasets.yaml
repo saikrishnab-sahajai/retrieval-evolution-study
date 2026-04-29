@@ -1,0 +1,60 @@
+# =============================================================================
+# Dataset configuration
+# All datasets loaded via the beir library.
+# Set enabled: false to skip a dataset in evaluation runs.
+# =============================================================================
+
+data_dir: "data/datasets"
+
+datasets:
+
+  msmarco:
+    name: "msmarco"
+    beir_name: "msmarco"
+    split: "dev"
+    enabled: true
+    description: "MS MARCO v1 passage ranking — in-domain baseline for most dense models"
+    passages: 8_841_823
+    queries: 6_980
+    relevance: binary
+    note: "Large corpus — dense eval uses FAISS; sparse eval uses BM25Okapi with chunked indexing"
+
+  nq:
+    name: "nq"
+    beir_name: "nq"
+    split: "test"
+    enabled: true
+    description: "Natural Questions — open-domain QA, paraphrase queries stress lexical matching"
+    passages: 2_681_468
+    queries: 3_452
+    relevance: binary
+
+  trec-covid:
+    name: "trec-covid"
+    beir_name: "trec-covid"
+    split: "test"
+    enabled: true
+    description: "TREC-COVID — domain-shift test, biomedical vocabulary"
+    passages: 171_332
+    queries: 50
+    relevance: graded  # 0=not relevant, 1=partially, 2=highly relevant
+
+  fiqa:
+    name: "fiqa"
+    beir_name: "fiqa"
+    split: "test"
+    enabled: true
+    description: "Financial QA — non-factoid long queries, another domain shift case"
+    passages: 57_638
+    queries: 648
+    relevance: graded
+
+  scifact:
+    name: "scifact"
+    beir_name: "scifact"
+    split: "test"
+    enabled: true
+    description: "SciFact — scientific claim verification, tests precision over recall"
+    passages: 5_183
+    queries: 300
+    relevance: binary

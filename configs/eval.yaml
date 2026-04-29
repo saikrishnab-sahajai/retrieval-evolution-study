@@ -1,0 +1,54 @@
+# =============================================================================
+# Evaluation configuration
+# =============================================================================
+
+# ---------------------------------------------------------------------------
+# IR metrics (computed via pytrec_eval against qrels)
+# ---------------------------------------------------------------------------
+metrics:
+  ndcg_at: [10]              # NDCG@10 — primary BEIR metric
+  mrr_at: [10]               # MRR@10 — QA-style single-relevant queries
+  map_at: [100]              # MAP@100 — multi-relevant queries
+  recall_at: [10, 50, 100]   # Recall@k — first-stage quality for RAG
+
+# Top-k documents to retrieve per query
+retrieval_top_k: 100         # retrieve 100; metrics evaluated at k ≤ 100
+
+# ---------------------------------------------------------------------------
+# Hybrid retrieval — Reciprocal Rank Fusion
+# ---------------------------------------------------------------------------
+rrf:
+  k: 60                      # RRF constant (standard value)
+  components:
+    - model: bm25
+      weight: 1.0
+    - model: bge
+      weight: 1.0
+
+# ---------------------------------------------------------------------------
+# LLM-as-judge (RAGAS + Ollama)
+# ---------------------------------------------------------------------------
+llm_judge:
+  enabled: true
+  ollama_model: "llama3.2:3b"         # fastest on M5; change to mistral:7b for quality
+  ollama_base_url: "http://localhost:11434"
+  sample_queries: 150                  # queries per dataset for LLM evaluation
+  top_k_passages: 5                    # top-5 passages per query evaluated
+  metric: "context_precision"          # only metric that doesn't need reference answer
+  datasets:                            # run LLM judge on these datasets only
+    - nq
+    - scifact
+    - trec-covid
+
+# ---------------------------------------------------------------------------
+# MLflow experiment tracking
+# ---------------------------------------------------------------------------
+mlflow:
+  tracking_uri: "mlruns"              # local directory (git-ignored)
+  experiment_name: "retrieval-evolution"
+
+# ---------------------------------------------------------------------------
+# Logging
+# ---------------------------------------------------------------------------
+log_level: "INFO"
+results_dir: "results"               # JSON results saved here per run

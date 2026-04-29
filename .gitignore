@@ -1,0 +1,35 @@
+# ── Large data files (re-downloadable via scripts/download_datasets.py) ──────
+data/datasets/*/corpus.jsonl
+data/datasets/*.zip
+
+# ── Fine-tuned model checkpoints and weights ─────────────────────────────────
+models/
+
+# ── Experiment tracking ───────────────────────────────────────────────────────
+mlruns/
+
+# ── LaTeX build artefacts ─────────────────────────────────────────────────────
+docs/*.aux
+docs/*.bbl
+docs/*.blg
+docs/*.fdb_latexmk
+docs/*.fls
+docs/*.log
+docs/*.out
+docs/*.toc
+docs/texput.log
+texput.log
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+
+# ── Jupyter ───────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+
+# ── Editor / OS ───────────────────────────────────────────────────────────────
+.DS_Store
+.vscode/
+.claude/

@@ -1,0 +1,14 @@
+{
+  "scifact": {
+    "model": "hybrid_rrf+reranker",
+    "llm": "llama3.2:3b",
+    "sample_n": 150,
+    "mean_context_precision": 0.25733333333333336
+  },
+  "trec-covid": {
+    "model": "hybrid_rrf+reranker",
+    "llm": "llama3.2:3b",
+    "sample_n": 50,
+    "mean_context_precision": 0.628
+  }
+}

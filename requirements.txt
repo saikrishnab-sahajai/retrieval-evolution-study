@@ -1,0 +1,55 @@
+# =============================================================================
+# retrieval_evolution_study — requirements
+# Virtual environment: retrieval_exp_env
+#   source ~/LearningAndDevelopment/virtualenvs/retrieval_exp_env/bin/activate
+#   pip install -r requirements.txt
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Core dependencies
+# -----------------------------------------------------------------------------
+torch>=2.11.0
+transformers>=5.5.0
+sentence-transformers>=5.4.0
+datasets>=4.8.0
+huggingface_hub>=1.10.0
+pandas>=2.0.0
+numpy>=1.24.0
+scikit-learn>=1.3.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+tqdm>=4.65.0
+jupyter>=1.0.0
+ipykernel>=6.29.0
+
+# -----------------------------------------------------------------------------
+# Sparse retrieval
+# -----------------------------------------------------------------------------
+rank_bm25                   # BM25Okapi implementation
+
+# -----------------------------------------------------------------------------
+# Early neural retrieval
+# -----------------------------------------------------------------------------
+gensim>=4.3.0               # Word2Vec (google-news-300d via gensim downloader)
+
+# -----------------------------------------------------------------------------
+# Evaluation — IR metrics
+# -----------------------------------------------------------------------------
+beir                        # BEIR benchmark datasets + evaluation harness
+pytrec_eval                 # trec_eval binding (NDCG, MAP, MRR, Recall)
+
+# -----------------------------------------------------------------------------
+# Fine-tuning
+# -----------------------------------------------------------------------------
+accelerate>=1.1.0           # Required by SentenceTransformerTrainer (HF Trainer backend)
+
+# -----------------------------------------------------------------------------
+# Experiment tracking
+# -----------------------------------------------------------------------------
+mlflow>=2.12.0              # Local tracking: mlflow ui → localhost:5000
+
+# -----------------------------------------------------------------------------
+# Utilities
+# -----------------------------------------------------------------------------
+pyyaml>=6.0                 # Config file loading (configs/*.yaml)
+httpx>=0.27                 # Ollama HTTP client for LLM-as-judge

@@ -1,0 +1,8 @@
+{
+  "scifact": {
+    "k1": 1.0,
+    "b": 1.0,
+    "ndcg@10": 0.5650256600607854,
+    "tuned_on": "scifact test split"
+  }
+}

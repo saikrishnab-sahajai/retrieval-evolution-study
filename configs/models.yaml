@@ -1,0 +1,145 @@
+# =============================================================================
+# Model configuration
+# =============================================================================
+
+# MPS (Apple Silicon) — used for all SentenceTransformer models
+# faiss-cpu is used for indexing (FAISS does not support MPS)
+device: "mps"            # options: mps | cpu | cuda
+batch_size: 64           # 64 avoids thermal throttling on M5 for large corpora (TREC-COVID 171K)
+
+# =============================================================================
+# Sparse retrieval — no GPU needed
+# =============================================================================
+sparse:
+
+  bow:
+    name: "BOW"
+    era: "pre-2000"
+    type: "sparse"
+    params:
+      analyzer: "word"
+      binary: false        # set true for pure binary BOW
+      max_features: 100_000
+    challenge: "No term weighting — common words dominate scores"
+
+  tfidf:
+    name: "TF-IDF"
+    era: "1972–2000"
+    type: "sparse"
+    params:
+      analyzer: "word"
+      max_features: 100_000
+      sublinear_tf: true
+    challenge: "No frequency saturation, no length normalisation"
+
+  bm25:
+    name: "BM25"
+    era: "1994–present"
+    type: "sparse"
+    params:
+      k1: 1.5             # term frequency saturation
+      b: 0.75             # length normalisation (0=none, 1=full)
+      epsilon: 0.25
+    challenge: "Purely lexical — synonyms score 0"
+
+# =============================================================================
+# Early neural — CPU only (gensim)
+# =============================================================================
+early_neural:
+
+  word2vec_mean:
+    name: "Word2Vec (mean pooling)"
+    era: "2013–2017"
+    type: "dense"
+    model_path: "word2vec-google-news-300"   # gensim downloader key
+    pooling: "mean"
+    challenge: "Context-free averaging collapses word order and polysemy"
+
+  word2vec_idf:
+    name: "Word2Vec (IDF-weighted)"
+    era: "2013–2017"
+    type: "dense"
+    model_path: "word2vec-google-news-300"
+    pooling: "idf_weighted"
+    challenge: "IDF weighting helps marginally but core problem remains"
+
+  doc2vec_dbow:
+    name: "Doc2Vec (PV-DBOW)"
+    era: "2014"
+    type: "dense"
+    vector_size: 300
+    epochs: 40
+    dm: 0          # 0=PV-DBOW (faster, better on retrieval); 1=PV-DM
+    min_count: 2
+    challenge: "Trained doc vector avoids averaging noise; OOV still silent, no subword"
+
+# =============================================================================
+# Dense retrieval — SentenceTransformer models (MPS)
+# =============================================================================
+dense:
+
+  minilm:
+    name: "all-MiniLM-L6-v2"
+    era: "2020"
+    hf_id: "sentence-transformers/all-MiniLM-L6-v2"
+    params: 22_000_000
+    embedding_dim: 384
+    type: "bi-encoder"
+    instruction_prefix: null
+    challenge: "General-purpose distillation — not IR-specific; single-vector"
+
+  dpr:
+    name: "DPR (context encoder)"
+    era: "2020"
+    hf_id: "facebook/dpr-ctx_encoder-single-nq-base"
+    params: 110_000_000
+    embedding_dim: 768
+    type: "bi-encoder"
+    instruction_prefix: null
+    note: "Passage encoder only; use facebook/dpr-question_encoder-single-nq-base for queries"
+    challenge: "Fine-tuned on NQ only — degrades on other domains"
+
+  mpnet:
+    name: "all-mpnet-base-v2"
+    era: "2020–2021"
+    hf_id: "sentence-transformers/all-mpnet-base-v2"
+    params: 109_000_000
+    embedding_dim: 768
+    type: "bi-encoder"
+    instruction_prefix: null
+    challenge: "Better objective than BERT/MiniLM (PLM+MLM) but still single-vector"
+
+  bge:
+    name: "BGE-base-en-v1.5"
+    era: "2023"
+    hf_id: "BAAI/bge-base-en-v1.5"
+    params: 109_000_000
+    embedding_dim: 768
+    type: "bi-encoder"
+    instruction_prefix: "Represent this sentence for searching relevant passages: "
+    challenge: "Large-scale training; instruction prefix required for queries only"
+
+  e5:
+    name: "E5-base-v2"
+    era: "2022–2023"
+    hf_id: "intfloat/e5-base-v2"
+    params: 109_000_000
+    embedding_dim: 768
+    type: "bi-encoder"
+    instruction_prefix_query: "query: "
+    instruction_prefix_passage: "passage: "
+    challenge: "Weak-supervision at scale; prefix matters significantly"
+
+# =============================================================================
+# Reranking — cross-encoder (runs on top of first-stage results)
+# =============================================================================
+reranking:
+
+  cross_encoder:
+    name: "cross-encoder/ms-marco-MiniLM-L-6-v2"
+    era: "2021–present"
+    hf_id: "cross-encoder/ms-marco-MiniLM-L-6-v2"
+    type: "cross-encoder"
+    first_stage_top_k: 100    # rerank top-100 from first-stage
+    rerank_top_k: 10          # return top-10 after reranking
+    applied_to: "hybrid_rrf"  # only applied on top of BM25+BGE RRF results
