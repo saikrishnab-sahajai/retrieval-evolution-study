@@ -352,9 +352,13 @@ MNR/InfoNCE & In-batch (free)          & High   & Current best practice \\
         \texttt{transformers~4.x}; \texttt{torch~2.x} (MPS backend);
         \texttt{gensim~4.x} (Word2Vec); \texttt{scikit-learn} (TF-IDF/BoW);
         \texttt{rank-bm25}; \texttt{beir}; \texttt{pytrec\_eval}.
-  \item[Replication]  All scripts in \texttt{scripts/}; results persisted to
-        \texttt{results/} as JSON; notebooks in \texttt{notebooks/} reproduce
-        all plots and tables.
+  \item[Replication]  Full source available at
+        \url{https://github.com/saikrishnab-sahajai/retrieval-evolution-study}.
+        The repository includes all scripts (\texttt{scripts/}), result files
+        (\texttt{results/} as JSON), notebooks (\texttt{notebooks/}), and
+        query/relevance data.  Large corpus files and model checkpoints are
+        excluded but can be reproduced via \texttt{scripts/download\_datasets.py}
+        and \texttt{scripts/run\_finetune.py}.
 \end{description}
 
 % =============================================================================
