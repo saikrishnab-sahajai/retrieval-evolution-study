@@ -1099,6 +1099,7 @@ dominating the fused score.
   box/.style={draw, rounded corners=4pt, minimum width=2.6cm, minimum height=0.82cm,
               align=center, font=\small, inner sep=4pt},
   arr/.style={-{Stealth[length=5pt,width=4pt]}, semithick},
+  lin/.style={semithick},
   slbl/.style={font=\scriptsize}
 ]
 
@@ -1111,15 +1112,19 @@ dominating the fused score.
                            (ce)   at (10.8, 0)    {Cross-Encoder\\[-2pt]{\footnotesize reranker}};
 \node[box, fill=green!25]  (out)  at (14.2, 0)    {Top-10};
 
-%% Query -> retrievers (right then angle up/down)
-\draw[arr] (q.east) -- ++(0.4,0) |- (bm25.west);
-\draw[arr] (q.east) -- ++(0.4,0) |- (bge.west);
+%% Fork point (Query -> retrievers)
+\coordinate (fork) at (1.7, 0);
+\draw[lin] (q.east) -- (fork);
+\draw[arr] (fork) |- (bm25.west);
+\draw[arr] (fork) |- (bge.west);
+\fill (fork) circle (1.5pt);
 
-%% Retrievers -> RRF (horizontal label segment, then vertical join)
-\draw[arr] (bm25.east) -- node[slbl, above] {top-100}
-           (rrf.west |- bm25.east) -- (rrf.west);
-\draw[arr] (bge.east)  -- node[slbl, below] {top-100}
-           (rrf.west |- bge.east)  -- (rrf.west);
+%% Merge point (retrievers -> RRF): one arrowhead into RRF
+\coordinate (merge) at (5.3, 0);
+\draw[lin] (bm25.east) -- node[slbl, above] {top-100} (merge |- bm25.east) -- (merge);
+\draw[lin] (bge.east)  -- node[slbl, below] {top-100} (merge |- bge.east)  -- (merge);
+\draw[arr] (merge) -- (rrf.west);
+\fill (merge) circle (1.5pt);
 
 %% RRF -> Cross-Encoder -> Output
 \draw[arr] (rrf.east) -- node[slbl, above] {top-100} (ce.west);
