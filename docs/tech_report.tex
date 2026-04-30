@@ -436,7 +436,7 @@ corrections over TF-IDF:
 \end{itemize}
 
 % -----------------------------------------------------------------------------
-\subsection{Results}
+\subsection{Experimental Results}
 % -----------------------------------------------------------------------------
 
 \begin{table}[h]
@@ -533,7 +533,10 @@ Table~\ref{tab:bm25_passage_stats} shows corpus passage-length statistics.
 
 \begin{table}[h]
 \centering
-\caption{Passage-length statistics per dataset (words).}
+\caption{Passage-length statistics per dataset (words).  CV = coefficient of
+  variation ($\sigma / \mu$): a dimensionless measure of length dispersion.
+  Higher CV indicates more variable passage lengths, making length
+  normalisation more important.}
 \label{tab:bm25_passage_stats}
 \begin{tabular}{lrrrrr}
 \toprule
@@ -745,7 +748,7 @@ This is the same intuition as TF-IDF applied in the vector space rather
 than the term-frequency space.
 
 % -----------------------------------------------------------------------------
-\subsection{Results}
+\subsection{Experimental Results}
 % -----------------------------------------------------------------------------
 
 \begin{table}[h]
@@ -968,7 +971,7 @@ model to learn fine-grained discrimination.  BGE's instruction prefix
 signals the encoding role for asymmetric retrieval, similar to E5.
 
 % -----------------------------------------------------------------------------
-\subsection{Results}
+\subsection{Experimental Results}
 % -----------------------------------------------------------------------------
 
 \begin{table}[h]
@@ -1168,7 +1171,7 @@ cannot be pre-computed, so inference cost is $O(|Q| \times |\text{candidates}|)$
 making it practical only for reranking a small candidate set (top-100).
 
 % -----------------------------------------------------------------------------
-\subsection{Results}
+\subsection{Experimental Results}
 % -----------------------------------------------------------------------------
 
 \begin{table}[h]
@@ -1269,7 +1272,7 @@ ft-Combined     & 15,050 & 6.7 min & 3 \\
 \end{tabular}
 \end{table}
 
-\subsection{Results}
+\subsection{Experimental Results}
 
 \begin{table}[h]
 \centering
